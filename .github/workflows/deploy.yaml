@@ -1,0 +1,24 @@
+name: Deploy API Gateway
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy-api-gateway:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Replace Parameters in OpenAPI Spec
+        run: |
+          sed -i 's/${region}/us-east-1/g' openapi.yaml
+          sed -i 's/${accountId}/891377390363/g' openapi.yaml
+
+      - name: Deploy API Gateway
+        run: |
+          aws apigateway import-rest-api --fail-on-warnings --parameters endpointConfigurationTypes=REGIONAL --body 'file://openapi.yaml'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'us-east-1'
