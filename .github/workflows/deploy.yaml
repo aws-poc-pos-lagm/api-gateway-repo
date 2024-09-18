@@ -18,6 +18,9 @@ jobs:
       - name: Display OpenAPI Spec
         run: cat openapi.yaml
 
+      - name: Validate OpenAPI Spec
+        run: aws apigateway validate-openapi --body 'file://openapi.yaml'
+
       - name: Deploy API Gateway
         run: |
           aws apigateway import-rest-api --fail-on-warnings --parameters endpointConfigurationTypes=REGIONAL --body 'file://openapi.yaml'
