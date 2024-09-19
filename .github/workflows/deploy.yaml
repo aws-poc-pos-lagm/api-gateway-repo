@@ -1,8 +1,10 @@
 name: Deploy API Gateway
+
 on:
   push:
     branches:
       - main
+
 jobs:
   deploy-api-gateway:
     runs-on: ubuntu-latest
@@ -10,21 +12,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Replace Parameters in OpenAPI Spec
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Deploy API Gateway using CloudFormation
         run: |
-          sed -i 's/${region}/us-east-1/g' openapi.yaml
-          sed -i 's/${accountId}/891377390363/g' openapi.yaml
+          aws cloudformation deploy \
+            --template-file ./templates/api_gateway.yaml \
+            --stack-name my-api-gateway-stack \
+            --capabilities CAPABILITY_IAM
 
-      - name: Display OpenAPI Spec
-        run: cat openapi.yaml
-
-      - name: Validate OpenAPI Spec
-        run: aws apigateway validate-openapi --body 'file://openapi.yaml'
-
-      - name: Deploy API Gateway
-        run: |
-          aws apigateway import-rest-api --fail-on-warnings --parameters endpointConfigurationTypes=REGIONAL --body 'file://openapi.yaml'
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: 'us-east-1'
