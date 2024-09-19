@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -25,4 +25,7 @@ jobs:
             --template-file ./templates/api_gateway.yaml \
             --stack-name my-api-gateway-stack \
             --capabilities CAPABILITY_IAM
+
+      - name: Output deployment result
+        run: echo "API Gateway deployed successfully"
 
