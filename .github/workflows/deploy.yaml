@@ -22,7 +22,7 @@ jobs:
       - name: Deploy API Gateway using CloudFormation
         run: |
           aws cloudformation deploy \
-            --template-file ./templates/api_gateway.yaml \
+            --template-file ./api_gateway.yaml \
             --stack-name my-api-gateway-stack \
             --capabilities CAPABILITY_IAM
 
