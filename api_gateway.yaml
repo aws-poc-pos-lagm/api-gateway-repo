@@ -16,7 +16,7 @@ Resources:
     Type: AWS::ApiGateway::Method
     Properties:
       RestApiId: !Ref ApiGateway
-      ResourceId: !Ref Resource
+      ResourceId: !Ref ResourceProducts
       HttpMethod: GET
       AuthorizationType: NONE
       Integration:
@@ -30,7 +30,7 @@ Resources:
     Type: AWS::ApiGateway::Method
     Properties:
       RestApiId: !Ref ApiGateway
-      ResourceId: !Ref Resource
+      ResourceId: !Ref ResourceProducts
       HttpMethod: POST
       AuthorizationType: NONE
       Integration:
@@ -44,8 +44,8 @@ Resources:
     Type: AWS::ApiGateway::Method
     Properties:
       RestApiId: !Ref ApiGateway
-      ResourceId: !Ref Resource
-      HttpMethod: POST
+      ResourceId: !Ref ResourceProducts
+      HttpMethod: DELETE
       AuthorizationType: NONE
       Integration:
         Type: AWS_PROXY
